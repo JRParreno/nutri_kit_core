@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'user_profile',
     'deficiency',
     'remedy',
+    'food',
     
     # packages
     'rest_framework',
