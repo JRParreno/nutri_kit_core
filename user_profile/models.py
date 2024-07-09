@@ -10,8 +10,6 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(
         User, related_name='profile', on_delete=models.CASCADE)
-
-    address = models.TextField(blank=False, null=False)
     age = models.IntegerField()
     profile_photo = models.ImageField(
         upload_to='images/profiles/', blank=True, null=True)

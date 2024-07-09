@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'remedy',
     'food',
     'treatment',
+    'api',
     
     # packages
     'rest_framework',
