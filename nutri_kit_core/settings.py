@@ -36,6 +36,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 INSTALLED_APPS = [
     # theme
     'unfold',
+    "unfold.contrib.forms",
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'remedy',
     'food',
     'treatment',
+    'trivia',
     'api',
     
     # packages

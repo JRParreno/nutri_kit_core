@@ -1,6 +1,6 @@
 from django.contrib import admin
-from unfold.admin import ModelAdmin
 from .models import Remedy, RemedyFood
+from unfold.admin import ModelAdmin
 from unfold.contrib.inlines.admin import NonrelatedTabularInline
 
 
