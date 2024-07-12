@@ -18,10 +18,12 @@ class Question(BaseModel):
         (MEDIUM, 'Medium'),
         (HARD, 'Hard'),
     ]
-
+    
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     question_text = models.TextField()
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_LEVELS)
+    question_banner = models.ImageField(
+        upload_to='images/question/', blank=True, null=True)
 
     def __str__(self):
         return self.question_text
