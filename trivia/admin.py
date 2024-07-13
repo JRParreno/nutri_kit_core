@@ -39,7 +39,7 @@ class QuestionAdmin(ModelAdmin):
     inlines = [AnswerInline]
     fieldsets = (
         (None, {
-            'fields': ('category', 'question_text', 'difficulty'),
+            'fields': ('category', 'question_text', 'difficulty', 'question_banner'),
             'description': 'Each question must belong to a category and have a difficulty level. '
                            'You can also add multiple possible answers to each question, '
                            'marking one or more as correct.'

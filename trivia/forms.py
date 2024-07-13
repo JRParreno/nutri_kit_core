@@ -19,6 +19,7 @@ class QuestionForm(forms.ModelForm):
             'category': 'Select the category for this question.',
             'question_text': 'Enter the text of the question.',
             'difficulty': 'Select the difficulty level of the question.',
+            'question_banner': 'Add Image to the trivia',
         }
 
 class AnswerForm(forms.ModelForm):
