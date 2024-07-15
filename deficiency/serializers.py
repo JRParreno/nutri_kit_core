@@ -1,6 +1,7 @@
 from rest_framework import serializers
+from treatment.serializers import RemedyDeficiencySerializers
 from .models import Deficiency, DeficiencySymptom, Symptom
-
+from treatment.models import Remedy, RemedyFood
 
 class SymptomSerializers(serializers.ModelSerializer):
     class Meta:
@@ -12,10 +13,22 @@ class DeficiencySymptomSerializers(serializers.ModelSerializer):
         model = DeficiencySymptom
         fields = '__all__'
 
-class DeficiencySerializers(serializers.ModelSerializer):
+        
+class DeficiencyDetailSerializers(serializers.ModelSerializer):
     symptoms = SymptomSerializers(many=True)
-    
+    remedies = serializers.SerializerMethodField()
     class Meta:
         model = Deficiency
         fields = '__all__'
 
+    def get_remedies(self, obj):
+        remedies = Remedy.objects.filter(deficiency=obj)
+        return RemedyDeficiencySerializers(remedies, many=True).data
+
+
+class DeficiencySerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Deficiency
+        exclude = ('symptoms',)
+
+    

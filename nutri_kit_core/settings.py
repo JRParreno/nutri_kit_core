@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     
     'user_profile',
     'deficiency',
-    'remedy',
     'food',
     'treatment',
     'trivia',
