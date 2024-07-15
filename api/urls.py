@@ -6,7 +6,7 @@ from user_profile.views import (ProfileView,
                                 UploadPhotoView, RequestPasswordResetEmail
                                 )
 from trivia.views import (QuestionListView,)
-
+from deficiency.views import (DeficiencyListView)
 
 app_name = 'api'
 
@@ -23,5 +23,11 @@ urlpatterns = [
          auth_views.PasswordResetConfirmView.as_view(),
          name='password-reset-confirm'),
      
+     # Trivia
      path('trivia/list', QuestionListView.as_view(), name='trivia-list'),
+     
+     
+     # Deficiency
+     path('deficiency/list', DeficiencyListView.as_view(), name='deficiency-list'),
+     
 ]
