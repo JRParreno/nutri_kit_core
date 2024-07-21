@@ -8,6 +8,7 @@ from user_profile.views import (ProfileView,
 from trivia.views import (QuestionListView,)
 from deficiency.views import (DeficiencyListView, DeficiencyDetailView)
 from treatment.views import (RemedyListView, RemedyDetailView)
+from food.views import (FoodListView, FoodDetailView, VitaminListView, VitaminDetailView)
 
 app_name = 'api'
 
@@ -35,5 +36,13 @@ urlpatterns = [
 
      # Remedy/Treatment
      path('remedy/list', RemedyListView.as_view(), name='remedy-list'),     
-     path('remedy/detail/<pk>', RemedyDetailView.as_view(), name='remedy-detail'),     
+     path('remedy/detail/<pk>', RemedyDetailView.as_view(), name='remedy-detail'),    
+      
+     # Food
+     path('food/list', FoodListView.as_view(), name='food-list'),     
+     path('food/detail/<pk>', FoodDetailView.as_view(), name='food-detail'),     
+     
+     # Vitamin
+     path('vitamin/list', VitaminListView.as_view(), name='vitamin-list'),     
+     path('vitamin/detail/<pk>', VitaminDetailView.as_view(), name='vitamin-detail'),     
 ]

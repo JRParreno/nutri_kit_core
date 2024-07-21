@@ -43,5 +43,5 @@ class CustomUserAdmin(ModelAdmin):
         "user_permissions",
     )
 
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, ModelAdmin)
 admin.site.register(User, CustomUserAdmin)

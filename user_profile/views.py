@@ -157,7 +157,6 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     def patch(self, request, *args, **kwargs):
         user = self.request.user
         user_details = self.request.data.get('user')
-        age = self.request.data.get('age')
         user_email = UserProfile.objects.filter(
             user__email=user_details['email']).exclude(user=user).exists()
 
@@ -175,7 +174,6 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         user.username = user_details['email']
         user.save()
 
-        user_profile.age = age
         user_profile.save()
 
         data = {
@@ -185,7 +183,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
             "firstName": user.first_name,
             "lastName": user.last_name,
             "email": user.email,
-            "age": user_profile.age
+            "age": user_profile.age,
         }
         return response.Response(data, status=status.HTTP_200_OK)
 

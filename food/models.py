@@ -1,6 +1,6 @@
 from django.db import models
-
 from core.base_models import BaseModel
+
 
 class FoodCategory(BaseModel):
     name = models.CharField(max_length=100)
@@ -14,6 +14,14 @@ class FoodCategory(BaseModel):
     def __str__(self):
         return self.name
 
+class Vitamin(BaseModel):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(
+        upload_to='images/vitamins/', blank=True, null=True)
+    
+    def __str__(self):
+        return self.name
 
 class Food(BaseModel):
     name = models.CharField(max_length=100)
@@ -22,6 +30,8 @@ class Food(BaseModel):
     description = models.TextField()
     image = models.ImageField(
         upload_to='images/food/', blank=True, null=True)
+    vitamins = models.ManyToManyField(Vitamin, related_name='foods')
+    
     
     def __str__(self):
         return self.name + self.scientificName
