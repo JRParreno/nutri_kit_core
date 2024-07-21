@@ -13,7 +13,7 @@ class RemedyListView(generics.ListAPIView):
     search_fields = ['name',]
     
 
-class RemedyDetailView(generics.ListAPIView):
+class RemedyDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = RemedyDeficiencySerializers
     queryset = Remedy.objects.all()

@@ -13,7 +13,7 @@ class FoodListView(generics.ListAPIView):
     search_fields = ['name', 'scientificName', 'vitamins__name']
     
 
-class FoodDetailView(generics.ListAPIView):
+class FoodDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = FoodSerializers
     queryset = Food.objects.all()
@@ -28,7 +28,7 @@ class VitaminListView(generics.ListAPIView):
     search_fields = ['name',]
     
 
-class VitaminDetailView(generics.ListAPIView):
+class VitaminDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = VitaminSerializers
     queryset = Vitamin.objects.all()
