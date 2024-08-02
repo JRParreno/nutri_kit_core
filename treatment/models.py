@@ -8,6 +8,7 @@ class Remedy(BaseModel):
     name = models.CharField(max_length=100)
     deficiency = models.ForeignKey(Deficiency, on_delete=models.CASCADE)
     description = models.TextField()
+    scientific_name =  models.CharField(max_length=100, null=True)
     
     class Meta:
         verbose_name_plural = 'Remedies'

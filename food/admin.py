@@ -14,12 +14,15 @@ class FoodCategoryInline(NonrelatedTabularInline):
         """
         return self.model.objects.all()
 
-    def save_new_instance(self, parent, instance):
+    def save_new_instance(self, parent, instance, commit=True):
         """
         Extra save method which can for example update inline instances based on current
         main model object. Method must be implemented.
         """
-        pass
+        instance.question = parent
+        if commit:
+            instance.save()
+        return instance
 
 class VitaminInline(NonrelatedTabularInline):
     model = Vitamin

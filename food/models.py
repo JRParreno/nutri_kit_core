@@ -26,7 +26,7 @@ class Vitamin(BaseModel):
 class Food(BaseModel):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)
-    scientificName = models.CharField(max_length=100)
+    scientificName = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField()
     image = models.ImageField(
         upload_to='images/food/', blank=True, null=True)
