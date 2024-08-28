@@ -1,5 +1,7 @@
+from itertools import groupby
+from operator import attrgetter
 from rest_framework import serializers
-from treatment.serializers import RemedyDeficiencySerializers, RemedyFoodDeficiencySerializers
+from treatment.serializers import RemedyDeficiencySerializers, RemedyFoodDeficiencySerializers, RemedySerializers
 from .models import Deficiency, DeficiencySymptom, Symptom
 from treatment.models import Remedy, RemedyFood
 
@@ -22,8 +24,9 @@ class DeficiencyDetailSerializers(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_remedies(self, obj):
-        remedies = RemedyFood.objects.filter(remedy__deficiency=obj)
-        return RemedyFoodDeficiencySerializers(remedies, many=True).data
+        remedies = Remedy.objects.filter(deficiency=obj)
+        return RemedySerializers(remedies, many=True).data
+
 
 
 class DeficiencySerializers(serializers.ModelSerializer):

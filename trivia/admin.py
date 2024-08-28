@@ -3,9 +3,9 @@ from django.contrib import admin
 from trivia.forms import AnswerForm, CategoryForm, QuestionForm
 from .models import  Category, Question, Answer
 from unfold.admin import ModelAdmin
-from unfold.contrib.inlines.admin import NonrelatedTabularInline
+from unfold.contrib.inlines.admin import TabularInline
 
-class AnswerInline(NonrelatedTabularInline):
+class AnswerInline(TabularInline):
     form = AnswerForm
     model = Answer
     extra = 1  # Number of empty forms to display

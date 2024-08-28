@@ -1,10 +1,10 @@
 from django.contrib import admin
 from .models import Remedy, RemedyFood
 from unfold.admin import ModelAdmin
-from unfold.contrib.inlines.admin import NonrelatedTabularInline
+from unfold.contrib.inlines.admin import TabularInline
 
 
-class RemedyFoodInline(NonrelatedTabularInline):
+class RemedyFoodInline(TabularInline):
     model = RemedyFood
     extra = 1  # Number of empty forms to display
     fields = ["food"]
@@ -13,6 +13,8 @@ class RemedyFoodInline(NonrelatedTabularInline):
         """
         Gets all nonrelated objects needed for inlines. Method must be implemented.
         """
+        if obj:
+            return self.model.objects.filter(remedy=obj)
         return self.model.objects.all()
 
     def save_new_instance(self, parent, instance, commit=True):

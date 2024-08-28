@@ -13,9 +13,10 @@ class RemedySerializers(serializers.ModelSerializer):
         
 class RemedyFoodDeficiencySerializers(serializers.ModelSerializer):
     food = FoodSerializers()
+    remedy = RemedySerializers()
     class Meta:
         model = RemedyFood
-        fields = ('id', 'food', 'remedy')
+        fields = ('id', 'food', 'remedy', 'remedy')
     
         
 class RemedyFoodSerializers(serializers.ModelSerializer):

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'treatment',
     'trivia',
     'api',
+    'meal',
     
     # packages
     'rest_framework',

@@ -9,6 +9,7 @@ from trivia.views import (QuestionListView,)
 from deficiency.views import (DeficiencyListView, DeficiencyDetailView)
 from treatment.views import (RemedyListView, RemedyDetailView)
 from food.views import (FoodListView, FoodDetailView, VitaminListView, VitaminDetailView)
+from meal.views import (UserMealPlanRegisterView, UserMealPlanListView, UserMealPlanDetailView)
 
 app_name = 'api'
 
@@ -45,4 +46,9 @@ urlpatterns = [
      # Vitamin
      path('vitamin/list', VitaminListView.as_view(), name='vitamin-list'),     
      path('vitamin/detail/<pk>', VitaminDetailView.as_view(), name='vitamin-detail'),     
+
+     # Meal
+     path('meal/plan/child/register', UserMealPlanRegisterView.as_view(), name='meal-plan-register'),     
+     path('meal/plan/child/list', UserMealPlanListView.as_view(), name='meal-plans'),     
+     path('meal/plan/child/detail/<int:usermealplan_id>/meal-plan/<int:mealplan_id>/', UserMealPlanDetailView.as_view(), name='meal-plan-detail'),     
 ]

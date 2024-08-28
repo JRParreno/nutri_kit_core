@@ -1,10 +1,10 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from unfold.contrib.inlines.admin import NonrelatedTabularInline
+from unfold.contrib.inlines.admin import TabularInline
 
 from deficiency.models import Symptom, Deficiency, DeficiencySymptom
 
-class DeficiencySymptomInline(NonrelatedTabularInline):
+class DeficiencySymptomInline(TabularInline):
     model = DeficiencySymptom
     extra = 1  # Number of empty forms to display
     fields = ["symptom"]

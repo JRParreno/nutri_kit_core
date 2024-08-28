@@ -1,9 +1,9 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from unfold.contrib.inlines.admin import NonrelatedTabularInline, NonrelatedStackedInline
+from unfold.contrib.inlines.admin import TabularInline, NonrelatedStackedInline
 from .models import Food, FoodCategory, Vitamin
 
-class FoodCategoryInline(NonrelatedTabularInline):
+class FoodCategoryInline(TabularInline):
     model = FoodCategory
     extra = 1  # Number of empty forms to display
     fields = ["name"]
@@ -24,7 +24,7 @@ class FoodCategoryInline(NonrelatedTabularInline):
             instance.save()
         return instance
 
-class VitaminInline(NonrelatedTabularInline):
+class VitaminInline(TabularInline):
     model = Vitamin
     extra = 1  # Number of empty forms to display
     fields = ["name"]
