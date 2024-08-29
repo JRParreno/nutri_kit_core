@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -102,12 +103,16 @@ WSGI_APPLICATION = 'nutri_kit_core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# postgresql://nutrikit_db_user:2rrWiYsYqkvJ4X3ek4ZGaJjYVS5Oldaw@dpg-cr83hhi3esus73fq0oo0-a.oregon-postgres.render.com/nutrikit_db
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse("postgresql://nutrikit_db_user:2rrWiYsYqkvJ4X3ek4ZGaJjYVS5Oldaw@dpg-cr83hhi3esus73fq0oo0-a.oregon-postgres.render.com/nutrikit_db")
 }
 
 
