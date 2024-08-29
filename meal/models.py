@@ -6,10 +6,10 @@ from core.base_models import BaseModel
 class HealthStatus(BaseModel):
     STATUS_CHOICES = [
         ('underweight', 'Underweight'),
-        ('normal', 'Normal weight'),
+        ('wasted', 'Wasted'),
         ('overweight', 'Overweight'),
         ('obese', 'Obese'),
-        ('athlete', 'Athlete'),
+        ('stunted', 'Stunted'),
     ]
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, unique=True)
