@@ -36,7 +36,7 @@ class UserMealPlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserMealPlan
-        exclude = ['meal_plan',]
+        fields = '__all__'
 
 
 class MealSerializer(serializers.ModelSerializer):
@@ -106,3 +106,13 @@ class MealPlanSerializer(serializers.ModelSerializer):
             return MealPlanSerializer(meal_plan).data
         except MealPlan.DoesNotExist:
             return None
+        
+class DayMealCompleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DayMealCompletion
+        fields = ['completed', ]      
+        
+    def update(self, instance, validated_data):
+        instance.completed = validated_data.get('completed', instance.completed)
+        instance.save()
+        return instance

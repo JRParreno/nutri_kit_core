@@ -1,11 +1,11 @@
-from rest_framework import generics, permissions, response, status
+from rest_framework import generics, permissions, response, status, viewsets
 from rest_framework.exceptions import NotFound
 
 from core.calc_birthdate import calculate_age
-from .models import HealthStatus, UserMealPlan, MealPlan
+from .models import HealthStatus, UserMealPlan, MealPlan, DayMealCompletion
 from .serializers import (UserMealPlanRegisterSerializer, 
                           UserListMealPlanSerializer,
-                          MealPlanSerializer)
+                          MealPlanSerializer, DayMealCompletionSerializer)
 from datetime import datetime, date
 
 
@@ -58,7 +58,7 @@ class UserMealPlanListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        return self.queryset.filter(user=self.request.user).order_by('-created_at')
 
 
 class UserMealPlanDetailView(generics.RetrieveAPIView):
@@ -67,17 +67,11 @@ class UserMealPlanDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     
     def get_object(self):
-        # Extract parameters from the URL
         usermealplan_id = self.kwargs.get('usermealplan_id')
-        mealplan_id = self.kwargs.get('mealplan_id')
-
-        # Retrieve the UserMealPlan instance based on usermealplan_id
         try:
             user_meal_plan = UserMealPlan.objects.get(pk=usermealplan_id)
         except UserMealPlan.DoesNotExist:
             raise NotFound(detail="UserMealPlan not found")
-
-        # Additional checks or logic can be applied here using mealplan_id if needed
 
         return user_meal_plan
     
@@ -87,3 +81,10 @@ class UserMealPlanDetailView(generics.RetrieveAPIView):
         context['usermealplan_id'] = self.kwargs.get('usermealplan_id')
 
         return context
+
+
+
+class DayMealCompletionViewSet(viewsets.ModelViewSet):
+    queryset = DayMealCompletion.objects.all()
+    serializer_class = DayMealCompletionSerializer
+    permission_classes = (permissions.IsAuthenticated,)
