@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
@@ -112,8 +116,9 @@ WSGI_APPLICATION = 'nutri_kit_core.wsgi.application'
 # }
 
 DATABASES = {
-    'default': dj_database_url.parse("postgresql://nutrikit_db_user:2rrWiYsYqkvJ4X3ek4ZGaJjYVS5Oldaw@dpg-cr83hhi3esus73fq0oo0-a.oregon-postgres.render.com/nutrikit_db")
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
+
 
 
 # Password validation
