@@ -27,6 +27,10 @@ class Meal(BaseModel):
     fats = models.DecimalField(max_digits=5, decimal_places=2)
     health_status = models.ForeignKey(HealthStatus, on_delete=models.CASCADE, related_name='meals', blank=True, null=True)
 
+
+    class Meta:
+        ordering = ['name',]
+        
     def __str__(self):
         return self.name
 
