@@ -107,7 +107,6 @@ WSGI_APPLICATION = 'nutri_kit_core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# postgresql://nutrikit_db_user:2rrWiYsYqkvJ4X3ek4ZGaJjYVS5Oldaw@dpg-cr83hhi3esus73fq0oo0-a.oregon-postgres.render.com/nutrikit_db
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',

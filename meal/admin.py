@@ -38,6 +38,14 @@ class HealthStatusFilter(admin.SimpleListFilter):
 
 @admin.register(DayMealPlan)
 class DayMealPlanAdminView(ModelAdmin):
+    autocomplete_fields = [
+        'breakfast',
+        'mid_morning_snack',
+        'lunch',
+        'afternoon_snack',
+        'dinner',
+        'evening_snack',
+    ]
     list_display = ['meal_plan', 'day_number', 'created_at', 'updated_at']
     search_fields = ['meal_plan__name',]
     list_filter = (HealthStatusFilter,)
