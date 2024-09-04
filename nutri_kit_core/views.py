@@ -1,4 +1,7 @@
+from datetime import datetime
+import os
 import json
+from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
@@ -6,6 +9,9 @@ from oauth2_provider.models import get_access_token_model
 from oauth2_provider.signals import app_authorized
 from oauth2_provider.views.base import TokenView
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+from meal.excel_reader import read_excel_file
+from meal.health_status_formula import getHealthForZHA, getHealthForZWA, getHealthForZWH, select_formula 
 
 
 class TokenViewWithUserId(TokenView):
@@ -53,3 +59,31 @@ class TokenViewWithUserId(TokenView):
         for k, v in headers.items():
             response[k] = v
         return response
+    
+
+
+
+def display_excel_data(request):
+    birthdate_str = '12/22/2019'
+    birthdate = datetime.strptime(birthdate_str, "%m/%d/%Y")
+
+    zhw = getHealthForZWH(82, 10, 2,'Male')
+    zha = getHealthForZHA(82, birthdate, 'Male')
+    zwa =  getHealthForZWA(10, birthdate, 'Male')
+    
+    print(f"ZHW: {zhw}")
+    print(f"ZHA: {zha}")
+    print(f"ZWA: {zwa}")
+    
+    formulas = {
+        'formula_one': zhw,
+        'formula_two': zha,
+        'formula_three': zwa
+    }
+    
+    formula = select_formula(formulas)
+    print(formula)
+
+
+    # Pass the data to the template
+    return render(request, 'display_excel.html')

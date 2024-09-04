@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, response, status, viewsets
 from rest_framework.exceptions import NotFound
 
 from core.calc_birthdate import calculate_age
+from meal.health_status_formula import getHealthForZHA, getHealthForZWA, getHealthForZWH, select_formula
 from .models import HealthStatus, UserMealPlan, MealPlan, DayMealCompletion
 from .serializers import (UserMealPlanRegisterSerializer, 
                           UserListMealPlanSerializer,
@@ -16,8 +17,8 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
     def post(self, request):
         name = request.data.get('name')
         birthdate_str = request.data.get('birthdate')
-        height = request.data.get('height')
-        weight = request.data.get('weight')
+        height = float(request.data.get('height'))
+        weight = float(request.data.get('weight'))
         health_status = request.data.get('health_status').lower()
         gender = request.data.get('gender')
         health_status_response = HealthStatus.objects.filter(status=health_status)
@@ -27,19 +28,40 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
         
         
         birthdate = datetime.strptime(birthdate_str, "%m/%d/%Y")
-        age =calculate_age(birthdate)
+        age = calculate_age(birthdate)
+        
+        zhw = getHealthForZWH(height, weight, age, gender)
+        zha = getHealthForZHA(height, birthdate, gender)
+        zwa =  getHealthForZWA(weight, birthdate, gender)
+        
+        """
+            get the values less than equal to -2
+            if the values hava all positive get the highest value and must be
+            greater than equal to 2 if all the values are the same the priority 
+            is stunted likewise obese
+            
+            take note: use formula 3 if all the values are positive
+        """
+        formulas = {
+            'formula_one': zhw,
+            'formula_two': zha,
+            'formula_three': zwa
+        }
+    
+        health_status_info = select_formula(formulas)
+        
         
         meal_plans = MealPlan.objects.filter(age=age)
         
         if not meal_plans.exists():
-        #    raise serializers.ValidationError(errors)
             return response.Response({'error_message': 'Age is not applicable.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+        if not health_status_info:
+            return response.Response({'error_message': 'Child is healthy'}, status=status.HTTP_400_BAD_REQUEST)
         
         user_meal_plan = UserMealPlan.objects.create(user=self.request.user, meal_plan=meal_plans.first(), name=name,
-                                                     gender=gender,
+                                                     gender=gender, health_status_info=health_status_info,
                                     birthdate=birthdate, height=height, weight=weight, health_status=health_status_response.first()
                                     )
         

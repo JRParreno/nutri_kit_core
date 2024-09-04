@@ -26,7 +26,7 @@ from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.views.generic import RedirectView
 
-from .views import TokenViewWithUserId
+from .views import TokenViewWithUserId, display_excel_data
 
 
 
@@ -57,6 +57,7 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(
              template_name='password_reset_complete.html'),
          name='password_reset_complete'),
+    path('display-excel/', display_excel_data, name='display_excel'),
 ]
 
 

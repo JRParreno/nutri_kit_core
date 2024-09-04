@@ -70,6 +70,23 @@ class UserMealPlan(BaseModel):
         (FEMALE, 'Female'),
     ]
     
+    MALE = 'M'
+    FEMALE = 'F'
+
+    """
+        underweight or overweight or obese: formula 3
+        stunted: formula 2
+        wasted: formula 1
+    """
+
+    STATUS_CHOICES = [
+        ('underweight', 'Underweight'),
+        ('wasted', 'Wasted'),
+        ('overweight', 'Overweight'),
+        ('obese', 'Obese'),
+        ('stunted', 'Stunted'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_meal_plans')
     name = models.CharField(verbose_name='Child full name', max_length=150)
     meal_plan = models.ForeignKey(MealPlan, on_delete=models.CASCADE, related_name='user_meal_plans')
@@ -80,6 +97,7 @@ class UserMealPlan(BaseModel):
     height = models.DecimalField(verbose_name='Height (cm)', max_digits=5, decimal_places=2)  # height in cm
     weight = models.DecimalField(verbose_name='Weight (kg)', max_digits=5, decimal_places=2)  # weight in kg
     health_status = models.ForeignKey(HealthStatus, on_delete=models.CASCADE)
+    health_status_info = models.CharField(max_length=20, choices=STATUS_CHOICES, default='wasted')
     gender = models.CharField(choices=GENDER_CHOICES, default=MALE, max_length=10)
     
     def save(self, *args, **kwargs):
