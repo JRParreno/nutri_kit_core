@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import (Meal, UserMealPlan, 
                      MealPlan, DayMealCompletion, DayMealPlan)
+from decimal import Decimal
 
 
 class UserMealPlanRegisterSerializer(serializers.Serializer):
@@ -58,11 +59,21 @@ class DayMealCompletionSerializer(serializers.ModelSerializer):
 class MealPlanSerializer(serializers.ModelSerializer):
     day_meal_completion = serializers.SerializerMethodField()
     user_meal_plan = serializers.SerializerMethodField()
+    total_calories = serializers.SerializerMethodField()
+    total_protein = serializers.SerializerMethodField()
+    total_carbs = serializers.SerializerMethodField()
+    total_fats = serializers.SerializerMethodField()
+    current_calories = serializers.SerializerMethodField()
+    current_protein = serializers.SerializerMethodField()
+    current_carbs = serializers.SerializerMethodField()
+    current_fats = serializers.SerializerMethodField()
     
     class Meta:
         model = MealPlan
-        fields = ['name', 'days', 'day_meal_completion', 'user_meal_plan']
-    
+        fields = ['name', 'days', 'day_meal_completion', 'user_meal_plan', 
+                  'total_calories', 'total_protein', 'total_carbs', 'total_fats', 
+                  'current_calories', 'current_protein', 'current_carbs', 'current_fats']
+        
     def __init__(self, *args, **kwargs):
         # init context and request
         context = kwargs.get('context', {})
@@ -95,7 +106,73 @@ class MealPlanSerializer(serializers.ModelSerializer):
             return MealPlanSerializer(meal_plan).data
         except MealPlan.DoesNotExist:
             return None
-        
+    
+    def get_total_calories(self, obj):
+        # Summing calories from all meals in the meal plan
+        return self.get_nutritional_total(obj, 'calories')
+
+    def get_total_protein(self, obj):
+        return self.get_nutritional_total(obj, 'protein')
+
+    def get_total_carbs(self, obj):
+        return self.get_nutritional_total(obj, 'carbs')
+
+    def get_total_fats(self, obj):
+        return self.get_nutritional_total(obj, 'fats')
+
+    def get_current_calories(self, obj):
+        return self.get_current_nutritional_total(obj, 'calories')
+
+    def get_current_protein(self, obj):
+        return self.get_current_nutritional_total(obj, 'protein')
+
+    def get_current_carbs(self, obj):
+        return self.get_current_nutritional_total(obj, 'carbs')
+
+    def get_current_fats(self, obj):
+        return self.get_current_nutritional_total(obj, 'fats')
+
+    def get_nutritional_total(self, obj, nutrient):
+        total = Decimal(0)
+        day_meal_plans = DayMealPlan.objects.filter(meal_plan=obj.meal_plan)
+        for day_meal_plan in day_meal_plans:
+            meals = [
+                day_meal_plan.breakfast,
+                day_meal_plan.mid_morning_snack,
+                day_meal_plan.lunch,
+                day_meal_plan.afternoon_snack,
+                day_meal_plan.dinner,
+                day_meal_plan.evening_snack,
+            ]
+            for meal in meals:
+                if meal:
+                    total += getattr(meal, nutrient, 0)
+        return total
+    
+    def get_current_nutritional_total(self, obj, nutrient):
+        total = Decimal(0)
+        # Get only the completed DayMealCompletion records
+        completed_meal_completions = DayMealCompletion.objects.filter(
+            user_meal_plan=obj,
+            completed=True
+        )
+
+        # Loop through the completed meals and sum their nutrients
+        for completion in completed_meal_completions:
+            day_meal_plan = completion.day_meal_plan
+            meals = [
+                day_meal_plan.breakfast,
+                day_meal_plan.mid_morning_snack,
+                day_meal_plan.lunch,
+                day_meal_plan.afternoon_snack,
+                day_meal_plan.dinner,
+                day_meal_plan.evening_snack,
+            ]
+            for meal in meals:
+                if meal:
+                    total += getattr(meal, nutrient, 0)
+        return total
+    
 class DayMealCompleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DayMealCompletion

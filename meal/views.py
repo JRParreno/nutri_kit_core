@@ -1,3 +1,4 @@
+import json
 from rest_framework import generics, permissions, response, status, viewsets
 from rest_framework.exceptions import NotFound
 
@@ -42,9 +43,25 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
             'formula_two': zha,
             'formula_three': zwa
         }
+        
+        print(formulas)
     
         health_status_info = select_formula(formulas)
         
+        health_status_infos = []
+        
+        if zhw < -2 or zhw < -3:
+            health_status_infos.append('wasted')
+        if zha < -2 or zha < -3:
+            health_status_infos.append('stunted')
+        if zwa < -2 or zwa < -3:
+            health_status_infos.append('underweight')
+        elif zwa > 2 and zwa <= 3:
+            health_status_infos.append('overweight')
+        elif zwa > 3:
+            health_status_infos.append('obese')
+        else:
+            pass
         
         meal_plans = MealPlan.objects.filter(age=age)
         
@@ -60,10 +77,18 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
                                     birthdate=birthdate, height=height, weight=weight
                                     )
         
+        if len(health_status_infos) == 3:
+            health_status_infos.pop()
+        elif len(health_status_infos) == 2 and 'wasted' in health_status_infos and 'underweight' in health_status_infos:
+             health_status_infos = ['wasted']
+        else:
+            pass
+        
         return response.Response(
             {
                 'usermealplan_id': str(user_meal_plan.pk),
-                'mealplan_id': str(meal_plans.first().pk)
+                'mealplan_id': str(meal_plans.first().pk),
+                'health_status_infos': health_status_infos,
             },
             status=status.HTTP_200_OK
         )

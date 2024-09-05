@@ -64,12 +64,12 @@ class TokenViewWithUserId(TokenView):
 
 
 def display_excel_data(request):
-    birthdate_str = '12/22/2019'
+    birthdate_str = '09/21/2020'
     birthdate = datetime.strptime(birthdate_str, "%m/%d/%Y")
 
-    zhw = getHealthForZWH(82, 10, 2,'Male')
-    zha = getHealthForZHA(82, birthdate, 'Male')
-    zwa =  getHealthForZWA(10, birthdate, 'Male')
+    zhw = getHealthForZWH(89.5, 11.2, 3, 'Male')
+    zha = getHealthForZHA(89.5, birthdate, 'Male')
+    zwa =  getHealthForZWA(11.2, birthdate, 'Male')
     
     print(f"ZHW: {zhw}")
     print(f"ZHA: {zha}")
@@ -83,6 +83,23 @@ def display_excel_data(request):
     
     formula = select_formula(formulas)
     print(formula)
+    
+    health_status_infos = []
+    
+    if zhw < -2 or zhw < -3:
+        health_status_infos.append('wasted')
+    if zha < -2 or zha < -3:
+        health_status_infos.append('stunted')
+    if zwa < -2 or zwa < -3:
+        health_status_infos.append('underweight')
+    elif zwa > 2 and zwa <= 3:
+        health_status_infos.append('overweight')
+    elif zwa > 3:
+        health_status_infos.append('obese')
+    else:
+        pass
+    
+    print(json.dumps(health_status_infos))
 
 
     # Pass the data to the template

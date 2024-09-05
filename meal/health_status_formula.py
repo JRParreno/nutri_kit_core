@@ -136,14 +136,13 @@ def select_formula(formulas):
         if (temp_formula_three_value >= 2 and temp_formula_three_value <= 3):
             return "overweight"
         return "obese"
-    elif all(value < 0 for value in formulas.values()):
-        # Return the lowest value with priority: formula_three > formula_two > formula_one
-        lowest_priority_value = min(formulas['formula_three'], formulas['formula_two'], formulas['formula_one'])
-        if lowest_priority_value == formulas['formula_three']:
-            return "underweight"
-        elif lowest_priority_value == formulas['formula_two']:
-            return "stunted"
-        else:
-            return "wasted"
-
+    # Return the lowest value with priority: formula_three > formula_two > formula_one
+    if formulas['formula_one'] < -2 or formulas['formula_one'] < -3:
+       return "wasted"
+    if formulas['formula_two'] < -2 or formulas['formula_two'] < -3:
+        return "stunted"
+    if formulas['formula_three'] < -2 or formulas['formula_three'] < -3:
+        return "underweight"
+    
     return None
+        
