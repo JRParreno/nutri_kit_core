@@ -1,8 +1,8 @@
 from rest_framework import generics, permissions, filters
 
 from core.paginate import ExtraSmallResultsSetPagination
-from .models import Remedy
-from .serializers import RemedyDeficiencySerializers, RemedySerializers
+from .models import Remedy, RemedyFavorite
+from .serializers import RemedyDeficiencySerializers, RemedyFavoriteSerializer, RemedySerializers
 
 class RemedyListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
@@ -17,3 +17,26 @@ class RemedyDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = RemedyDeficiencySerializers
     queryset = Remedy.objects.all()
+
+
+
+
+class RemedyFavoriteCreateView(generics.CreateAPIView):
+    serializer_class = RemedyFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(user_profile=self.request.user.profile)
+
+
+class RemedyFavoriteDeleteView(generics.DestroyAPIView):
+    serializer_class = RemedyFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get_object(self):
+        remedy = generics.get_object_or_404(Remedy, id=self.kwargs['remedy_id'])
+        return generics.get_object_or_404(
+            RemedyFavorite,
+            remedy=remedy,
+            user_profile=self.request.user.profile
+        )

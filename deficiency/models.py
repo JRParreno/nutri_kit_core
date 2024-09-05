@@ -1,6 +1,7 @@
 from django.db import models
 
 from core.base_models import BaseModel
+from user_profile.models import UserProfile
 
 
 class Symptom(BaseModel):
@@ -35,3 +36,14 @@ class DeficiencySymptom(BaseModel):
 
     def __str__(self):
         return f"{self.deficiency.name} - {self.symptom.name}"
+
+
+class DeficiencyFavorite(BaseModel):
+    deficiency = models.ForeignKey(Deficiency, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('deficiency', 'user_profile')
+
+    def __str__(self):
+        return f"{self.deficiency} - {self.user_profile}"

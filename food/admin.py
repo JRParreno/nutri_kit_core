@@ -1,7 +1,7 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from unfold.contrib.inlines.admin import TabularInline, NonrelatedStackedInline
-from .models import Food, FoodCategory, Vitamin
+from unfold.contrib.inlines.admin import TabularInline
+from .models import Food, FoodCategory, Vitamin, FoodFavorite, VitaminFavorite
 
 class FoodCategoryInline(TabularInline):
     model = FoodCategory
@@ -61,3 +61,14 @@ class FoodAdminView(ModelAdmin):
     list_display = ['name', 'scientificName' ,'category','created_at', 'updated_at']
     search_fields = ['name', 'scientificName',]
     filter_horizontal = ('vitamins',)
+
+
+@admin.register(VitaminFavorite)
+class VitaminFavoriteAdminView(ModelAdmin):
+    list_display = ['vitamin', 'user_profile', 'created_at', 'updated_at']
+    search_fields = ['vitamin__name',]
+
+@admin.register(FoodFavorite)
+class FoodAdminView(ModelAdmin):
+    list_display = ['food', 'user_profile', 'created_at', 'updated_at']
+    search_fields = ['food__name',]

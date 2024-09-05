@@ -64,12 +64,12 @@ class TokenViewWithUserId(TokenView):
 
 
 def display_excel_data(request):
-    birthdate_str = '09/21/2020'
+    birthdate_str = '09/05/2021'
     birthdate = datetime.strptime(birthdate_str, "%m/%d/%Y")
 
-    zhw = getHealthForZWH(89.5, 11.2, 3, 'Male')
-    zha = getHealthForZHA(89.5, birthdate, 'Male')
-    zwa =  getHealthForZWA(11.2, birthdate, 'Male')
+    zhw = getHealthForZWH(90, 85, 3, 'Male')
+    zha = getHealthForZHA(90, birthdate, 'Male')
+    zwa =  getHealthForZWA(85, birthdate, 'Male')
     
     print(f"ZHW: {zhw}")
     print(f"ZHA: {zha}")

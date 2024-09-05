@@ -1,8 +1,8 @@
 from rest_framework import generics, permissions, filters
 
 from core.paginate import ExtraSmallResultsSetPagination
-from .models import Deficiency, DeficiencySymptom
-from .serializers import DeficiencySerializers, DeficiencyDetailSerializers
+from .models import Deficiency, DeficiencyFavorite, DeficiencySymptom
+from .serializers import DeficiencyFavoriteSerializer, DeficiencySerializers, DeficiencyDetailSerializers
 
 class DeficiencyListView(generics.ListAPIView):
     serializer_class = DeficiencySerializers
@@ -18,3 +18,24 @@ class DeficiencyDetailView(generics.RetrieveAPIView):
     queryset = Deficiency.objects.all()
     permission_classes = [permissions.IsAuthenticated,]
     
+
+
+class DeficiencyFavoriteCreateView(generics.CreateAPIView):
+    serializer_class = DeficiencyFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(user_profile=self.request.user.profile)
+
+
+class DeficiencyFavoriteDeleteView(generics.DestroyAPIView):
+    serializer_class = DeficiencyFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get_object(self):
+        deficiency = generics.get_object_or_404(Deficiency, id=self.kwargs['deficiency_id'])
+        return generics.get_object_or_404(
+            DeficiencyFavorite,
+            deficiency=deficiency,
+            user_profile=self.request.user.profile
+        )

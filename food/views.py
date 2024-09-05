@@ -1,8 +1,8 @@
 from rest_framework import generics, permissions, filters
 
 from core.paginate import ExtraSmallResultsSetPagination
-from .models import Food, Vitamin
-from .serializers import FoodSerializers, VitaminSerializers
+from .models import Food, FoodFavorite, Vitamin, VitaminFavorite
+from .serializers import FoodFavoriteSerializer, FoodSerializers, VitaminFavoriteSerializer, VitaminSerializers
 
 class FoodListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
@@ -32,3 +32,45 @@ class VitaminDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = VitaminSerializers
     queryset = Vitamin.objects.all()
+
+
+class FoodFavoriteCreateView(generics.CreateAPIView):
+    serializer_class = FoodFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(user_profile=self.request.user.profile)
+
+
+class FoodFavoriteDeleteView(generics.DestroyAPIView):
+    serializer_class = FoodFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get_object(self):
+        food = generics.get_object_or_404(Food, id=self.kwargs['food_id'])
+        return generics.get_object_or_404(
+            FoodFavorite,
+            food=food,
+            user_profile=self.request.user.profile
+        )
+        
+
+class VitaminFavoriteCreateView(generics.CreateAPIView):
+    serializer_class = VitaminFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(user_profile=self.request.user.profile)
+
+
+class VitaminFavoriteDeleteView(generics.DestroyAPIView):
+    serializer_class = VitaminFavoriteSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get_object(self):
+        vitamin = generics.get_object_or_404(Vitamin, id=self.kwargs['vitamin_id'])
+        return generics.get_object_or_404(
+            VitaminFavorite,
+            vitamin=vitamin,
+            user_profile=self.request.user.profile
+        )

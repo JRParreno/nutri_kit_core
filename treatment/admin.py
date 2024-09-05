@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Remedy, RemedyFood
+from .models import Remedy, RemedyFood, RemedyFavorite
 from unfold.admin import ModelAdmin
 from unfold.contrib.inlines.admin import TabularInline
 
@@ -38,3 +38,9 @@ class RemedyAdminView(ModelAdmin):
 class DeficiencySymptomAdminView(ModelAdmin):
     list_display = ['remedy', 'food','created_at', 'updated_at']
     search_fields = ['remedy__name', 'food__name',]
+
+
+@admin.register(RemedyFavorite)
+class RemedyFavoriteAdminView(ModelAdmin):
+    list_display = ['remedy', 'user_profile', 'created_at', 'updated_at']
+    search_fields = ['remedy__name',]

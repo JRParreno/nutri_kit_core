@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from food.serializers import FoodSerializers
-from .models import Remedy, RemedyFood
+from .models import Remedy, RemedyFood, RemedyFavorite
 from food.models import Food
 
 
@@ -14,9 +14,12 @@ class RemedySerializers(serializers.ModelSerializer):
 class RemedyFoodDeficiencySerializers(serializers.ModelSerializer):
     food = FoodSerializers()
     remedy = RemedySerializers()
+
     class Meta:
         model = RemedyFood
-        fields = ('id', 'food', 'remedy', 'remedy')
+        fields = ('id', 'food', 'remedy', 'remedy', )
+
+
     
         
 class RemedyFoodSerializers(serializers.ModelSerializer):
@@ -36,13 +39,40 @@ class RemedyFoodDetailSerializers(serializers.ModelSerializer):
 
 class RemedyDeficiencySerializers(serializers.ModelSerializer):
     foods = RemedyFoodDetailSerializers(source='remedyfood_set', many=True, read_only=True)
-    
+    is_favorite = serializers.SerializerMethodField()
+
     class Meta:
         model = Remedy
-        fields = ('id', 'name' ,'description', 'scientific_name','foods')
+        fields = ('id', 'name' ,'description', 'scientific_name', 'foods', 'is_favorite')
         
         
-        
+    def __init__(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        self.request = context.get('request', None)
+        super(RemedyDeficiencySerializers, self).__init__(*args, **kwargs)
+  
+    
+    def get_is_favorite(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return RemedyFavorite.objects.filter(remedy=obj, user_profile=user.profile).exists()
+        return False
+    
+class RemedyFavoriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemedyFavorite
+        fields = ['remedy']
+    
+    def __init__(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        self.request = context.get('request', None)
+        super(RemedyFavoriteSerializer, self).__init__(*args, **kwargs)
 
-
-
+    def create(self, validated_data):
+        user_profile = self.context['request'].user.profile
+        remedy = validated_data['remedy']
+        favorite, created = RemedyFavorite.objects.get_or_create(
+            remedy=remedy,
+            user_profile=user_profile
+        )
+        return favorite

@@ -2,7 +2,7 @@ from django.contrib import admin
 from unfold.admin import ModelAdmin
 from unfold.contrib.inlines.admin import TabularInline
 
-from deficiency.models import Symptom, Deficiency, DeficiencySymptom
+from deficiency.models import Symptom, Deficiency, DeficiencySymptom, DeficiencyFavorite
 
 class DeficiencySymptomInline(TabularInline):
     model = DeficiencySymptom
@@ -40,3 +40,9 @@ class DeficiencySymptomAdminView(ModelAdmin):
     list_display = ['symptom', 'deficiency','created_at', 'updated_at']
     search_fields = ['symptom__name', 'deficiency__name',]
 
+
+
+@admin.register(DeficiencyFavorite)
+class DeficiencyFavoriteAdminView(ModelAdmin):
+    list_display = ['deficiency', 'user_profile', 'created_at', 'updated_at']
+    search_fields = ['deficiency__name',]

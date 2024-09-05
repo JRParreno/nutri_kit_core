@@ -75,7 +75,6 @@ class MealPlanSerializer(serializers.ModelSerializer):
                   'current_calories', 'current_protein', 'current_carbs', 'current_fats']
         
     def __init__(self, *args, **kwargs):
-        # init context and request
         context = kwargs.get('context', {})
         self.request = context.get('request', None)
         super(MealPlanSerializer, self).__init__(*args, **kwargs)

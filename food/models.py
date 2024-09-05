@@ -1,5 +1,6 @@
 from django.db import models
 from core.base_models import BaseModel
+from user_profile.models import UserProfile
 
 
 class FoodCategory(BaseModel):
@@ -35,3 +36,25 @@ class Food(BaseModel):
     
     def __str__(self):
         return self.name + self.scientificName
+
+
+class FoodFavorite(BaseModel):
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('food', 'user_profile')
+
+    def __str__(self):
+        return f"{self.food} - {self.user_profile}"
+
+
+class VitaminFavorite(BaseModel):
+    vitamin = models.ForeignKey(Vitamin, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('vitamin', 'user_profile')
+
+    def __str__(self):
+        return f"{self.vitamin} - {self.user_profile}"
