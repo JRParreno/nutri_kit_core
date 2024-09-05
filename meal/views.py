@@ -3,7 +3,7 @@ from rest_framework.exceptions import NotFound
 
 from core.calc_birthdate import calculate_age
 from meal.health_status_formula import getHealthForZHA, getHealthForZWA, getHealthForZWH, select_formula
-from .models import HealthStatus, UserMealPlan, MealPlan, DayMealCompletion
+from .models import UserMealPlan, MealPlan, DayMealCompletion
 from .serializers import (UserMealPlanRegisterSerializer, 
                           UserListMealPlanSerializer,
                           MealPlanSerializer, DayMealCompletionSerializer)
@@ -19,12 +19,7 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
         birthdate_str = request.data.get('birthdate')
         height = float(request.data.get('height'))
         weight = float(request.data.get('weight'))
-        health_status = request.data.get('health_status').lower()
         gender = request.data.get('gender')
-        health_status_response = HealthStatus.objects.filter(status=health_status)
-        
-        if not health_status_response.exists():
-            return response.Response({'error_message': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
         
         
         birthdate = datetime.strptime(birthdate_str, "%m/%d/%Y")
@@ -62,7 +57,7 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
         
         user_meal_plan = UserMealPlan.objects.create(user=self.request.user, meal_plan=meal_plans.first(), name=name,
                                                      gender=gender, health_status_info=health_status_info,
-                                    birthdate=birthdate, height=height, weight=weight, health_status=health_status_response.first()
+                                    birthdate=birthdate, height=height, weight=weight
                                     )
         
         return response.Response(

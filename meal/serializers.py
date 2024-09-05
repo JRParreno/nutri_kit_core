@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import (Meal, HealthStatus, UserMealPlan, 
+from .models import (Meal, UserMealPlan, 
                      MealPlan, DayMealCompletion, DayMealPlan)
 
 
@@ -8,23 +8,13 @@ class UserMealPlanRegisterSerializer(serializers.Serializer):
     birthdate = serializers.DateField(format="%m/%d/%Y", input_formats=["%m/%d/%Y"], required=True)
     height = serializers.DecimalField(required=True, max_digits=5, decimal_places=2)
     weight = serializers.DecimalField(required=True, max_digits=5, decimal_places=2)
-    health_status = serializers.ChoiceField(choices=HealthStatus.STATUS_CHOICES, required=True)
     gender = serializers.ChoiceField(choices=UserMealPlan.GENDER_CHOICES, required=True)
     class Meta:
         fields = ['name', 'birthdate', 'height', 
-                  'weight', 'health_status', 'gender',
+                  'weight', 'gender',
                   ]
 
-
-class HealthStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = HealthStatus
-        fields = '__all__'
-
-
-
 class UserListMealPlanSerializer(serializers.ModelSerializer):
-    health_status = HealthStatusSerializer()
 
     class Meta:
         model = UserMealPlan
@@ -32,18 +22,18 @@ class UserListMealPlanSerializer(serializers.ModelSerializer):
 
 
 class UserMealPlanSerializer(serializers.ModelSerializer):
-    health_status = HealthStatusSerializer()
 
     class Meta:
         model = UserMealPlan
         fields = '__all__'
+        
 
 
 class MealSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Meal
-        exclude = ['health_status',]
+        fields = '__all__'
 
 class DayMealPlanSerializer(serializers.ModelSerializer):
     breakfast = MealSerializer()
@@ -66,13 +56,12 @@ class DayMealCompletionSerializer(serializers.ModelSerializer):
 
         
 class MealPlanSerializer(serializers.ModelSerializer):
-    health_status = HealthStatusSerializer()
     day_meal_completion = serializers.SerializerMethodField()
     user_meal_plan = serializers.SerializerMethodField()
     
     class Meta:
         model = MealPlan
-        fields = ['name', 'health_status', 'days', 'day_meal_completion', 'user_meal_plan']
+        fields = ['name', 'days', 'day_meal_completion', 'user_meal_plan']
     
     def __init__(self, *args, **kwargs):
         # init context and request
