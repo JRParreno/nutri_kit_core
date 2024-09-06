@@ -10,7 +10,25 @@ class RemedySerializers(serializers.ModelSerializer):
     class Meta:
         model = Remedy
         fields = '__all__'
-        
+
+
+
+class RemedyFavoriteListSerializer(serializers.ModelSerializer):
+    remedy = RemedySerializers()
+    class Meta:
+        model = RemedyFavorite
+        fields = ['remedy']
+    
+    def __init__(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        self.request = context.get('request', None)
+        super(RemedyFavoriteListSerializer, self).__init__(*args, **kwargs)
+    
+    def to_representation(self, instance):
+        # Return the serialized remedy data directly
+        remedy_serializer = self.fields['remedy']
+        return remedy_serializer.to_representation(instance.remedy)
+
 class RemedyFoodDeficiencySerializers(serializers.ModelSerializer):
     food = FoodSerializers()
     remedy = RemedySerializers()

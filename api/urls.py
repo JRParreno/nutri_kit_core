@@ -6,8 +6,10 @@ from user_profile.views import (ProfileView,
                                 UploadPhotoView, RequestPasswordResetEmail
                                 )
 from trivia.views import (QuestionListView,)
-from deficiency.views import (DeficiencyListView, DeficiencyDetailView, DeficiencyFavoriteCreateView, DeficiencyFavoriteDeleteView)
-from treatment.views import (RemedyListView, RemedyDetailView, RemedyFavoriteCreateView, RemedyFavoriteDeleteView)
+from deficiency.views import (DeficiencyListView, DeficiencyDetailView, DeficiencyFavoriteCreateView, DeficiencyFavoriteDeleteView,
+                              DeficiencyFavoriteListView)
+from treatment.views import (RemedyListView, RemedyDetailView, RemedyFavoriteCreateView, RemedyFavoriteDeleteView,
+                             RemedyFavoriteListView)
 from food.views import (FoodListView, FoodDetailView, VitaminListView, VitaminDetailView, FoodFavoriteCreateView, FoodFavoriteDeleteView,
                         VitaminFavoriteCreateView, VitaminFavoriteDeleteView
                         )
@@ -37,12 +39,14 @@ urlpatterns = [
      # Deficiency
      path('deficiency/list', DeficiencyListView.as_view(), name='deficiency-list'),
      path('deficiency/detail/<pk>', DeficiencyDetailView.as_view(), name='deficiency-detail'),
+     path('deficiency-favorite/list/', DeficiencyFavoriteListView.as_view(), name='list_deficiency_favorite'),
      path('deficiency-favorite/create/', DeficiencyFavoriteCreateView.as_view(), name='create_deficiency_favorite'),
      path('deficiency-favorite/delete/<int:deficiency_id>/', DeficiencyFavoriteDeleteView.as_view(), name='delete_deficiency_favorite'),
 
      # Remedy/Treatment
      path('remedy/list', RemedyListView.as_view(), name='remedy-list'),     
-     path('remedy/detail/<pk>', RemedyDetailView.as_view(), name='remedy-detail'),    
+     path('remedy/detail/<pk>', RemedyDetailView.as_view(), name='remedy-detail'),   
+     path('remedy-favorite/list/', RemedyFavoriteListView.as_view(), name='list_remedy_favorite'), 
      path('remedy-favorite/create/', RemedyFavoriteCreateView.as_view(), name='create_remedy_favorite'),
      path('remedy-favorite/delete/<int:remedy_id>/', RemedyFavoriteDeleteView.as_view(), name='delete_remedy_favorite'),
      
@@ -58,6 +62,7 @@ urlpatterns = [
      path('vitamin/detail/<pk>', VitaminDetailView.as_view(), name='vitamin-detail'),     
      path('vitamin-favorite/create/', VitaminFavoriteCreateView.as_view(), name='create_vitamin_favorite'),
      path('vitamin-favorite/delete/<int:vitamin_id>/', VitaminFavoriteDeleteView.as_view(), name='delete_vitamin_favorite'),
+     
      # Meal
      path('meal/plan/child/register', UserMealPlanRegisterView.as_view(), name='meal-plan-register'),     
      path('meal/plan/child/list', UserMealPlanListView.as_view(), name='meal-plans'),     

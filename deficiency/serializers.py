@@ -45,6 +45,23 @@ class DeficiencySerializers(serializers.ModelSerializer):
         exclude = ('symptoms',)
 
 
+class DeficiencyFavoriteListSerializer(serializers.ModelSerializer):
+    deficiency = DeficiencySerializers()
+    class Meta:
+        model = DeficiencyFavorite
+        fields = ['deficiency']
+    
+    def __init__(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        self.request = context.get('request', None)
+        super(DeficiencyFavoriteListSerializer, self).__init__(*args, **kwargs)
+    
+    def to_representation(self, instance):
+        # Return the serialized deficiency data directly
+        deficiency_serializer = self.fields['deficiency']
+        return deficiency_serializer.to_representation(instance.deficiency)
+
+
 class DeficiencyFavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeficiencyFavorite
