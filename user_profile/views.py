@@ -184,6 +184,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
             "lastName": user.last_name,
             "email": user.email,
             "age": user_profile.age,
+            "profilePhoto": request.build_absolute_uri(user_profile.profile_photo.url) if user_profile.profile_photo else None,
         }
         return response.Response(data, status=status.HTTP_200_OK)
 
