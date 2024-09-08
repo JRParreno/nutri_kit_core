@@ -14,7 +14,13 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}/manage.py"
+            "program": "${workspaceFolder}/manage.py",
+            "env": {
+                "EMAIL_HOST_USER": "projectnutrikit@gmail.com",
+                "DEFAULT_FROM_EMAIL": "projectnutrikit@gmail.com",
+                "EMAIL_HOST_PASSWORD": "ahvniqwtqlmewaau",
+                "DEBUG": "False",
+            }
         }
     ]
 }
