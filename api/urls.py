@@ -11,7 +11,7 @@ from deficiency.views import (DeficiencyListView, DeficiencyDetailView, Deficien
 from treatment.views import (RemedyListView, RemedyDetailView, RemedyFavoriteCreateView, RemedyFavoriteDeleteView,
                              RemedyFavoriteListView)
 from food.views import (FoodListView, FoodDetailView, VitaminListView, VitaminDetailView, FoodFavoriteCreateView, FoodFavoriteDeleteView,
-                        VitaminFavoriteCreateView, VitaminFavoriteDeleteView
+                        VitaminFavoriteCreateView, VitaminFavoriteDeleteView, FoodFavoriteListView, VitaminFavoriteListView
                         )
 from meal.views import (UserMealPlanRegisterView, UserMealPlanListView, UserMealPlanDetailView,
                         DayMealCompletionViewSet
@@ -54,12 +54,14 @@ urlpatterns = [
      # Food
      path('food/list', FoodListView.as_view(), name='food-list'),     
      path('food/detail/<pk>', FoodDetailView.as_view(), name='food-detail'),     
+     path('food-favorite/list/', FoodFavoriteListView.as_view(), name='list_food_favorite'), 
      path('food-favorite/create/', FoodFavoriteCreateView.as_view(), name='create_food_favorite'),
      path('food-favorite/delete/<int:food_id>/', FoodFavoriteDeleteView.as_view(), name='delete_food_favorite'),
      
      # Vitamin
      path('vitamin/list', VitaminListView.as_view(), name='vitamin-list'),     
      path('vitamin/detail/<pk>', VitaminDetailView.as_view(), name='vitamin-detail'),     
+     path('vitamin-favorite/list/', VitaminFavoriteListView.as_view(), name='list_vitamin_favorite'), 
      path('vitamin-favorite/create/', VitaminFavoriteCreateView.as_view(), name='create_vitamin_favorite'),
      path('vitamin-favorite/delete/<int:vitamin_id>/', VitaminFavoriteDeleteView.as_view(), name='delete_vitamin_favorite'),
      

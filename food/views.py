@@ -2,7 +2,8 @@ from rest_framework import generics, permissions, filters
 
 from core.paginate import ExtraSmallResultsSetPagination
 from .models import Food, FoodFavorite, Vitamin, VitaminFavorite
-from .serializers import FoodFavoriteSerializer, FoodSerializers, VitaminFavoriteSerializer, VitaminSerializers
+from .serializers import (FoodFavoriteSerializer, FoodSerializers, VitaminFavoriteSerializer, 
+                          VitaminSerializers, FoodFavoriteListSerializer, VitaminFavoriteListSerializer)
 
 class FoodListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated,]
@@ -53,7 +54,30 @@ class FoodFavoriteDeleteView(generics.DestroyAPIView):
             food=food,
             user_profile=self.request.user.profile
         )
-        
+
+
+class FoodFavoriteListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+    serializer_class = FoodFavoriteListSerializer
+    queryset = FoodFavorite.objects.all()
+    pagination_class = ExtraSmallResultsSetPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['food__name',]
+
+    def get_queryset(self):
+        return self.queryset.filter(user_profile=self.request.user.profile)
+
+
+class VitaminFavoriteListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated,]
+    serializer_class = VitaminFavoriteListSerializer
+    queryset = VitaminFavorite.objects.all()
+    pagination_class = ExtraSmallResultsSetPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['vitamin__name',]
+
+    def get_queryset(self):
+        return self.queryset.filter(user_profile=self.request.user.profile)
 
 class VitaminFavoriteCreateView(generics.CreateAPIView):
     serializer_class = VitaminFavoriteSerializer

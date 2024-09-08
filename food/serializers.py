@@ -88,3 +88,37 @@ class VitaminFavoriteSerializer(serializers.ModelSerializer):
             user_profile=user_profile
         )
         return favorite
+
+
+class FoodFavoriteListSerializer(serializers.ModelSerializer):
+    food = FoodSerializers()
+    class Meta:
+        model = FoodFavorite
+        fields = ['food']
+    
+    def __init__(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        self.request = context.get('request', None)
+        super(FoodFavoriteListSerializer, self).__init__(*args, **kwargs)
+    
+    def to_representation(self, instance):
+        # Return the serialized food data directly
+        food_serializer = self.fields['food']
+        return food_serializer.to_representation(instance.food)
+
+
+class VitaminFavoriteListSerializer(serializers.ModelSerializer):
+    vitamin = VitaminSerializers()
+    class Meta:
+        model = VitaminFavorite
+        fields = ['vitamin']
+    
+    def __init__(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        self.request = context.get('request', None)
+        super(VitaminFavoriteListSerializer, self).__init__(*args, **kwargs)
+    
+    def to_representation(self, instance):
+        # Return the serialized vitamin data directly
+        vitamin_serializer = self.fields['vitamin']
+        return vitamin_serializer.to_representation(instance.vitamin)
