@@ -14,7 +14,7 @@ from food.views import (FoodListView, FoodDetailView, VitaminListView, VitaminDe
                         VitaminFavoriteCreateView, VitaminFavoriteDeleteView, FoodFavoriteListView, VitaminFavoriteListView
                         )
 from meal.views import (UserMealPlanRegisterView, UserMealPlanListView, UserMealPlanDetailView,
-                        DayMealCompletionViewSet
+                        DayMealCompletionViewSet, UserMealPlanDeleteView
                         )
 
 app_name = 'api'
@@ -72,5 +72,6 @@ urlpatterns = [
      path('meal/plan/child/list', UserMealPlanListView.as_view(), name='meal-plans'),     
      path('meal/plan/child/detail/<int:usermealplan_id>/meal-plan/<int:mealplan_id>/', UserMealPlanDetailView.as_view(), name='meal-plan-detail'),     
      path('meal/plan/child/complete/<pk>', DayMealCompletionViewSet.as_view({'patch': 'partial_update'}), name='meal-plan-complete'),     
+     path('meal/plan/child/delete/<pk>', UserMealPlanDeleteView.as_view(), name='meal-plan-delete'),     
 
 ]

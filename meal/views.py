@@ -7,7 +7,7 @@ from meal.health_status_formula import getHealthForZHA, getHealthForZWA, getHeal
 from .models import UserMealPlan, MealPlan, DayMealCompletion
 from .serializers import (UserMealPlanRegisterSerializer, 
                           UserListMealPlanSerializer,
-                          MealPlanSerializer, DayMealCompletionSerializer)
+                          MealPlanSerializer, DayMealCompletionSerializer, UserMealPlanSerializer)
 from datetime import datetime, date
 
 
@@ -123,6 +123,12 @@ class UserMealPlanDetailView(generics.RetrieveAPIView):
         context['usermealplan_id'] = self.kwargs.get('usermealplan_id')
 
         return context
+
+
+class UserMealPlanDeleteView(generics.DestroyAPIView):
+    serializer_class = UserMealPlanSerializer
+    queryset = UserMealPlan.objects.all()
+    permission_classes = [permissions.IsAuthenticated,]
 
 
 
