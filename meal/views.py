@@ -68,6 +68,10 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
         if not meal_plans.exists():
             return response.Response({'error_message': 'Age is not applicable.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        meal_plans = meal_plans.filter(health_status_info=health_status_info)
+
+        if not meal_plans.exists():
+            return response.Response({'error_message': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not health_status_info:
             return response.Response({'error_message': 'Child is healthy'}, status=status.HTTP_400_BAD_REQUEST)
