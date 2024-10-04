@@ -11,7 +11,7 @@ from .serializers import (UserMealPlanRegisterSerializer,
 from datetime import datetime, date
 
 
-class UserMealPlanRegisterView(generics.CreateAPIView):
+class   UserMealPlanRegisterView(generics.CreateAPIView):
     serializer_class = UserMealPlanRegisterSerializer
     permission_classes = [permissions.IsAuthenticated,]
 
@@ -70,11 +70,13 @@ class UserMealPlanRegisterView(generics.CreateAPIView):
 
         meal_plans = meal_plans.filter(health_status_info=health_status_info)
 
+        
+        if not health_status_info:
+            return response.Response({'error_message': 'Child is healthy'}, status=status.HTTP_400_BAD_REQUEST)
+        
         if not meal_plans.exists():
             return response.Response({'error_message': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not health_status_info:
-            return response.Response({'error_message': 'Child is healthy'}, status=status.HTTP_400_BAD_REQUEST)
         
         user_meal_plan = UserMealPlan.objects.create(user=self.request.user, meal_plan=meal_plans.first(), name=name,
                                                      gender=gender, health_status_info=health_status_info,
